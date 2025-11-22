@@ -1,0 +1,224 @@
+### StockMaster API - Complete Testing
+### All endpoints in one file
+
+@baseUrl = http://localhost:8000
+@contentType = application/json
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYzODA0ODI3LCJpYXQiOjE3NjM4MDM5MjcsImp0aSI6IjA2OWJjZjgwOWRiYzQwNTBhNGVhNDk3NDMzOTQ0MGU5IiwidXNlcl9pZCI6IjhlZTFhNDk1LWE2ZDEtNGNiMC1hZjAzLTcxNTY0ZDQ2N2ZjOCJ9.XzD4DgH4aRxk5Y3uSZR8TWloHjb9zAIEcu1Gc0gMjEE
+
+### ============================================
+### 1. AUTH ENDPOINTS (No Auth Required)
+### ============================================
+
+### 1.1 Register User
+POST {{baseUrl}}/api/v1/auth/register/
+Content-Type: {{contentType}}
+
+{
+  "email": "testodoo@example.com",
+  "username": "testodoo",
+  "password": "testpass123",
+  "password2": "testpass123",
+  "first_name": "Test",
+  "last_name": "User",
+  "role": "staff"
+}
+
+### 1.2 Login (Get JWT Tokens)
+POST {{baseUrl}}/api/v1/auth/login/
+Content-Type: {{contentType}}
+
+{
+  "email": "testodoo@example.com",
+  "password": "testpass123"
+}
+
+### 1.3 Refresh Token
+POST {{baseUrl}}/api/v1/auth/refresh/
+Content-Type: {{contentType}}
+
+{
+  "refresh": "PASTE_REFRESH_TOKEN_HERE"
+}
+
+### ============================================
+### 2. USER PROFILE ENDPOINTS (Auth Required)
+### ============================================
+
+### 2.1 Get Current User Profile
+GET {{baseUrl}}/api/v1/users/me/
+Authorization: Bearer {{token}}
+
+### 2.2 Update Current User Profile
+PUT {{baseUrl}}/api/v1/users/me/
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "first_name": "UpdatedName",
+  "last_name": "UpdatedLast",
+  "email": "newemail@example.com"
+}
+
+### ============================================
+### 3. PRODUCTS ENDPOINTS (Auth Required)
+### ============================================
+
+### 3.1 List All Products
+GET {{baseUrl}}/catelog/products/
+Authorization: Bearer {{token}}
+
+### 3.2 Create Product
+POST {{baseUrl}}/catelog/products/
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "name": "Steel Rod",
+  "sku": "SR-001",
+  "category": "Metals",
+  "uom": "kg",
+  "reorder_level": 50
+}
+
+### 3.3 Get Product Details
+### First run 3.1 (List Products) to get a product ID, then replace {product_id} below
+GET {{baseUrl}}/catelog/products/{f607d025-1b24-46bd-a175-578e7e3a886e}/
+Authorization: Bearer {{token}}
+
+### 3.4 Update Product
+### Replace {product_id} with actual product ID from 3.1 list
+PUT {{baseUrl}}/catelog/products/{f607d025-1b24-46bd-a175-578e7e3a886e}/
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "name": "Updated Steel Rod",
+  "reorder_level": 75
+}
+
+### 3.5 Delete Product
+### Replace {product_id} with actual product ID from 3.1 list
+DELETE {{baseUrl}}/catelog/products/{product_id}/
+Authorization: Bearer {{token}}
+
+### ============================================
+### 4. SKU ENDPOINTS (Auth Required)
+### ============================================
+
+### 4.1 List All SKUs
+GET {{baseUrl}}/catelog/skus/
+Authorization: Bearer {{token}}
+
+### 4.2 Create SKU
+POST {{baseUrl}}/catelog/skus/
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "code": "SKU-001",
+  "description": "SKU for Steel Rod",
+  "product": "f607d025-1b24-46bd-a175-578e7e3a886e"
+}
+
+### ============================================
+### 5. STOCK ENDPOINTS (Auth Required)
+### ============================================
+
+### 5.1 List All Stock
+GET {{baseUrl}}/api/inventory/stock/
+Authorization: Bearer {{token}}
+
+### 5.2 Create Stock Record
+POST {{baseUrl}}/api/inventory/stock/
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "product": "550e8400-e29b-41d4-a716-446655440000",
+  "warehouse": "550e8400-e29b-41d4-a716-446655440001",
+  "qty": 100
+}
+
+### 5.3 Get Stock Details
+GET {{baseUrl}}/api/inventory/stock/f607d025-1b24-46bd-a175-578e7e3a886e/
+Authorization: Bearer {{token}}
+
+### 5.4 Update Stock
+PUT {{baseUrl}}/api/inventory/stock/550e8400-e29b-41d4-a716-446655440002/
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "qty": 150
+}
+
+### ============================================
+### 6. STOCK TRANSACTIONS (Auth Required)
+### ============================================
+
+### 6.1 List All Stock Transactions
+GET {{baseUrl}}/api/inventory/transactions/
+Authorization: Bearer {{token}}
+
+### 6.2 Create Stock Transaction
+POST {{baseUrl}}/api/inventory/transactions/
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "stock": "550e8400-e29b-41d4-a716-446655440002",
+  "transaction_type": "IN",
+  "qty": 50,
+  "reference": "REC-001"
+}
+
+### ============================================
+### 7. ORDERS ENDPOINTS (Auth Required)
+### ============================================
+
+### 7.1 Create Order
+POST {{baseUrl}}/api/v1/operations/orders/
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "customer_name": "ABC Company",
+  "warehouse": "550e8400-e29b-41d4-a716-446655440001",
+  "status": "PLACED",
+  "items": [
+    {
+      "product": "550e8400-e29b-41d4-a716-446655440000",
+      "qty": 10
+    }
+  ]
+}
+
+### ============================================
+### TESTING WORKFLOW
+### ============================================
+
+# 1. Register User → Run "1.1 Register User"
+# 2. Login → Run "1.2 Login" and copy "access" token
+# 3. Update line 6 with token (NO quotes, NO "Bearer")
+# 4. Test protected endpoints → All sections 2-7
+#
+# Expected Responses:
+# - 200/201: Success (data returned)
+# - 400: Bad request (check JSON)
+# - 401: Unauthorized (token expired, run login again)
+# - 404: Not found (wrong ID)
+# - 500: Server error (check terminal)
+
+### ============================================
+### QUICK STATUS CODES
+### ============================================
+
+# 200 OK → Request successful, data returned
+# 201 Created → Resource created
+# 204 No Content → Deletion successful
+# 400 Bad Request → Invalid parameters
+# 401 Unauthorized → Invalid/expired token
+# 403 Forbidden → No permission
+# 404 Not Found → Resource doesn't exist
+# 500 Internal Server Error → Server issue
+

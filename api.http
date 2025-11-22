@@ -1,0 +1,93 @@
+### StockMaster API Testing
+### Use VS Code REST Client extension to test these endpoints
+
+@baseUrl = http://localhost:8000/api/v1
+@contentType = application/json
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYzODAzMTY5LCJpYXQiOjE3NjM4MDIyNjksImp0aSI6ImM5NjVhZWY0N2ExZjRjYTA4ZjgyODM3YzIwZWFmY2Q0IiwidXNlcl9pZCI6Ijc3ZjI2MDRkLTA2YzEtNDZmOC1iYmFkLWFkZDNlMjg3NzVlNiJ9.ckCRM9hi0BQKL9L27oqRl0NYDiGriwJ2aNAiMcPxzGw
+
+### ============================================
+### AUTH ENDPOINTS
+### ============================================
+
+### 1. Register User
+POST {{baseUrl}}/auth/register/
+Content-Type: {{contentType}}
+
+{
+  "email": "testuser@example.com",
+  "username": "testuser",
+  "password": "testpass123",
+  "password2": "testpass123",
+  "first_name": "Test",
+  "last_name": "User",
+  "role": "staff"
+}
+
+### 2. Login (Get JWT Tokens)
+POST {{baseUrl}}/auth/login/
+Content-Type: {{contentType}}
+
+{
+  "email": "testuser@example.com",
+  "password": "testpass123"
+}
+
+### 3. Refresh Token
+POST {{baseUrl}}/auth/refresh/
+Content-Type: {{contentType}}
+
+{
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2NDQwNjMxMCwiaWF0IjoxNzYzODAxNTEwLCJqdGkiOiI1ZDUzNTE0YjMwYTg0OTI3OWUxM2ZjNTBhZDg1NThlOSIsInVzZXJfaWQiOiI3N2YyNjA0ZC0wNmMxLTQ2ZjgtYmJhZC1hZGQzZTI4Nzc1ZTYifQ.Z__XbFU18tEktvyKVdKjZefTh-Yphy-k_0G5c9oxjmg"
+}
+
+### ============================================
+### USER PROFILE ENDPOINTS (Requires Token)
+### ============================================
+
+### 4. Get Current User Profile
+GET {{baseUrl}}/users/me/
+Authorization: Bearer {{token}}
+
+### 5. Update User Profile
+PUT {{baseUrl}}/users/me/
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "first_name": "UpdatedName",
+  "last_name": "UpdatedLast",
+  "email": "newemail@example.com"
+}
+
+### ============================================
+### INSTRUCTIONS - FOLLOW EXACTLY!
+### ============================================
+
+# STEP 1: Run "1. Register User"
+#   → Click "Send Request" above section
+#   → Wait for 201 response with user data
+
+# STEP 2: Run "2. Login (Get JWT Tokens)"
+#   → Click "Send Request" above section
+#   → Look at response on RIGHT panel
+#   → Find "access": "eyJhbGciOi..." (long string)
+#   → Copy EVERYTHING between first and last quote
+
+# STEP 3: Update @token variable (line 6)
+#   → Current: @token = PASTE_YOUR_ACCESS_TOKEN_HERE
+#   → Replace PASTE_YOUR_ACCESS_TOKEN_HERE with the access token
+#   → NO quotes needed! NO "Bearer" prefix needed!
+#   → Example: @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.xyz...
+
+# STEP 4: Run "4. Get Current User Profile"
+#   → Should return 200 with user data
+#   → If 401: Go back to STEP 2, token might be expired
+
+# STEP 5: Run "5. Update User Profile"
+#   → Should return 200 with updated user data
+
+# STEP 6 (Optional): Refresh expired token
+#   → Copy "refresh" token from Step 2 response
+#   → Paste in "3. Refresh Token" body
+#   → Run it, get new access token
+#   → Update @token on line 6 again
