@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'accounts',
     'catelog',
     'operations',
+    'rest_framework',
+
 ]
 
 MIDDLEWARE = [
