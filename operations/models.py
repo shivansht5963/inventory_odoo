@@ -26,7 +26,7 @@ ORDER_STATUS_CHOICES = (
     (ORDER_PICKED, "Picked"),
     (ORDER_SHIPPED, "Shipped"),
 )
-
+# ghjkl
 class Receipt(models.Model):
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	supplier = models.CharField(max_length=255)
