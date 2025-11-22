@@ -5,7 +5,7 @@ A modern, full-stack inventory management system designed for franchise business
 ## 🚀 Live Demo
 
 ### Main Application
-[**Stock Master - Franchise Inventory Management**](https://stockmaster-franchise-inventory-main-qdgj27nus.vercel.app/)
+[**Stock Master - Franchise Inventory Management**](https://stockmaster-franchise-inventory-mai.vercel.app/)
 
 ### Admin Dashboard
 [**Admin Login**](https://odoo-54z4.onrender.com/admin)
