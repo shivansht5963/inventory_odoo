@@ -75,8 +75,8 @@ class AllocationSerializer(serializers.ModelSerializer):
         model = InventoryAllocation
         fields = ["id", "order", "product", "product_sku", "product_name", "warehouse", "qty", "created_at"]
 
-
+##orderstatusserializer
 class OrderStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ["id", "customer_name", "status", "created_at"]
+        fields = ["id", "customer_name", "status", "created_at"] 
