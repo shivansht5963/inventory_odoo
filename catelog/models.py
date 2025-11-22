@@ -3,6 +3,7 @@ import uuid
 from django.db import models
 from django.core.validators import MinValueValidator
 
+# fgdfdg
 
 class Product(models.Model):
 	"""Product catalog."""
