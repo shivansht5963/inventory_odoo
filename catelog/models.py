@@ -2,12 +2,6 @@ import uuid
 
 from django.db import models
 from django.core.validators import MinValueValidator
-<<<<<<< HEAD
-# from sjango.contrib.postgres.fields import ArrayField
-=======
-
-# fgdfdg
->>>>>>> amrita_changes
 
 class Product(models.Model):
 	"""Product catalog."""
