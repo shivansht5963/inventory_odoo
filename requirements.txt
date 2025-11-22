@@ -1,0 +1,12 @@
+# requirements for inventory_odoo
+# Assumptions:
+# - This is a Django-based project. If you use a different DB or need other packages,
+#   add or remove entries accordingly.
+# - Pin ranges are conservative (Django 4.2.x compatible). Adjust versions to your CI/CD needs.
+
+Django>=4.2,<5.0
+djangorestframework>=3.14,<4.0
+psycopg2-binary>=2.9,<3.0
+python-dotenv>=1.0,<2.0
+Pillow>=9.0,<10.0
+gunicorn>=20.1,<21.0
