@@ -2,7 +2,7 @@ import uuid
 
 from django.db import models
 from django.core.validators import MinValueValidator
-
+# from sjango.contrib.postgres.fields import ArrayField
 
 class Product(models.Model):
 	"""Product catalog."""
