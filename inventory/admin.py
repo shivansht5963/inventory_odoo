@@ -5,7 +5,6 @@ from .models import Stock, StockTransaction
 class StockAdmin(admin.ModelAdmin):
     list_display = ("sku", "total_qty", "reserved_qty", "updated_at")
     search_fields = ("sku__code",)
-    raw_id_fields = ("sku",)
     ordering = ("-updated_at",)
 
 @admin.register(StockTransaction)
