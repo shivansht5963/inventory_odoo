@@ -188,7 +188,21 @@ class OrderItem(models.Model):
     class Meta:
         indexes = [models.Index(fields=["product"]), models.Index(fields=["order"])]
 
-  
+class InventoryAllocation(models.Model):
+    """Tracks reserved qty for an order item (separate from Stock table)."""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    order = models.ForeignKey("Order", on_delete=models.CASCADE, related_name="allocations")
+    product = models.ForeignKey("catelog.Product", on_delete=models.PROTECT, related_name="allocations")
+    warehouse = models.ForeignKey("warehouse.Warehouse", on_delete=models.PROTECT, related_name="allocations")
+    qty = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="allocations_created")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Alloc {self.product.sku} x {self.qty} (Order: {self.order.id})"
+
+    class Meta:
+        indexes = [models.Index(fields=["order"]), models.Index(fields=["product", "warehouse"])]  
 
 
 class Ledger(models.Model):
