@@ -34,8 +34,9 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '.onrender.com',  # Allow all Render domains
-    '*',  # Allow all for development
+    # '*',  # Allow all for development
 ]
+
 
 
 # Application definition
@@ -173,7 +174,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:3000",
     "http://127.0.0.1:5173",
-    "*",  # Allow all origins for development
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
 ]
 
 CORS_ALLOW_CREDENTIALS = True

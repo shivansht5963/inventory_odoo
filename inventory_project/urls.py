@@ -17,8 +17,35 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from accounts.views import AuthViewSet, UserViewSet
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+
+# Health check and API documentation endpoint
+@require_http_methods(["GET"])
+def api_home(request):
+    return JsonResponse({
+        'status': 'API is running!',
+        'message': 'Inventory Backend API - Hackathon Edition',
+        'available_endpoints': {
+            'admin': '/admin/',
+            'auth': {
+                'register': 'POST /api/v1/auth/register/',
+                'login': 'POST /api/v1/auth/login/',
+                'refresh': 'POST /api/v1/auth/refresh/',
+            },
+            'users': {
+                'profile': 'GET /api/v1/users/me/',
+                'update': 'PUT /api/v1/users/me/',
+            },
+            'operations': 'GET /api/v1/operations/',
+            'catalog': 'GET /api/v1/catelog/',
+            'inventory': 'GET /api/v1/inventory/',
+        },
+        'version': '1.0.0'
+    })
 
 urlpatterns = [
+    path('', api_home, name='api-home'),  # Root endpoint with documentation
     path('admin/', admin.site.urls),
     # Auth endpoints
     path('api/v1/auth/register/', AuthViewSet.as_view({'post': 'register'}), name='register'),
