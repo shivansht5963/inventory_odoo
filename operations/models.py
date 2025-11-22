@@ -16,6 +16,16 @@ OP_TRANSFER = "TRANSFER"
 OP_ADJUSTMENT = "ADJUSTMENT"
 OPERATION_CHOICES = ((OP_RECEIPT, OP_RECEIPT), (OP_DELIVERY, OP_DELIVERY), (OP_TRANSFER, OP_TRANSFER), (OP_ADJUSTMENT, OP_ADJUSTMENT))
 
+ORDER_PLACED = "PLACED"
+ORDER_RESERVED = "RESERVED"
+ORDER_PICKED = "PICKED"
+ORDER_SHIPPED = "SHIPPED"
+ORDER_STATUS_CHOICES = (
+    (ORDER_PLACED, "Placed"),
+    (ORDER_RESERVED, "Reserved"),
+    (ORDER_PICKED, "Picked"),
+    (ORDER_SHIPPED, "Shipped"),
+)
 
 class Receipt(models.Model):
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -140,6 +150,45 @@ class TransferItem(models.Model):
 
 	class Meta:
 		indexes = [models.Index(fields=["product"])]
+class Order(models.Model):
+    """Customer Order for fulfillment pipeline."""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    customer_name = models.CharField(max_length=255)
+    warehouse = models.ForeignKey(
+        "warehouse.Warehouse",
+        on_delete=models.PROTECT,
+        related_name="orders",
+    )
+    status = models.CharField(max_length=20, choices=ORDER_STATUS_CHOICES, default=ORDER_PLACED)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        related_name="orders_created",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Order {self.id} - {self.customer_name} - {self.status}"
+
+    class Meta:
+        indexes = [models.Index(fields=["created_at"]), models.Index(fields=["status", "warehouse"])]
+
+class OrderItem(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
+    product = models.ForeignKey(
+        "catelog.Product", on_delete=models.PROTECT, related_name="order_items"
+    )
+    qty = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+
+    def __str__(self):
+        return f"{self.product.sku} x {self.qty} (Order: {self.order.id})"
+
+    class Meta:
+        indexes = [models.Index(fields=["product"]), models.Index(fields=["order"])]
+
+  
 
 
 class Ledger(models.Model):
