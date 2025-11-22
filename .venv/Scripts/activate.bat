@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\Shivansh\OneDrive\Desktop\inventory_odoo\.venv
+set VIRTUAL_ENV=C:\Users\Hp\inventory_odoo\.venv
 
 if not defined PROMPT set PROMPT=$P$G
 

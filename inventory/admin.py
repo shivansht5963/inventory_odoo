@@ -1,12 +1,14 @@
 from django.contrib import admin
-
-from .models import Stock
-
+from .models import Stock, StockTransaction
 
 @admin.register(Stock)
 class StockAdmin(admin.ModelAdmin):
-	list_display = ("product", "warehouse", "qty", "created_at", "updated_at")
-	search_fields = ("product__name", "product__sku", "warehouse__name")
-	list_filter = ("warehouse",)
-	raw_id_fields = ("product", "warehouse")
-	ordering = ("-updated_at",)
+    list_display = ("sku", "total_qty", "reserved_qty", "updated_at")
+    search_fields = ("sku__code",)
+    ordering = ("-updated_at",)
+
+@admin.register(StockTransaction)
+class StockTransactionAdmin(admin.ModelAdmin):
+    list_display = ("sku", "delta", "reason", "created_at")
+    search_fields = ("sku__code", "reason")
+    ordering = ("-created_at",)
